@@ -1,4 +1,4 @@
-var Car = function( color = 'gray', color2 = 'yellow') {
+var Car = function( color = 'gray', color2 = 'gray') {
   this.colorPri = color;
   this.colorSec = color2;
   this.w = 15; // width
@@ -11,11 +11,12 @@ var Car = function( color = 'gray', color2 = 'yellow') {
   this.y = roads[this.src].y;
   this.path = dijkstra(this.src,this.dest);
   this.pathPos = 0;
-  this.skips = 30;
+  this.skips = Math.ceil(random(30,50));
   this.skipsDone = 0;
   this.xinc = (roads[this.path[this.pathPos+1]].x - roads[this.path[this.pathPos]].x)/this.skips;
   this.yinc = (roads[this.path[this.pathPos+1]].y - roads[this.path[this.pathPos]].y)/this.skips;
   this.delay = Math.ceil(random(0,30));
+  this.emergencyLevel = 0;
 }
 
 function populateCars(){
@@ -26,8 +27,9 @@ function populateCars(){
   return car_Arr;
 }
 
-function moveCar(c){
+function updateCar(c){
   if(c.delay > 0){c.delay--;}
+
   else if(c.path[c.pathPos] == c.dest){
 
     c.src = c.dest;
@@ -47,16 +49,16 @@ function moveCar(c){
       c.skipsDone = 0;
 
     } else {
-
-      c.x = roads[c.path[c.pathPos]].x + (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)*c.skipsDone / c.skips;
-      c.y = roads[c.path[c.pathPos]].y + (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)*c.skipsDone / c.skips;
-      c.skipsDone++;
+      if(roads[c.path[c.pathPos+1]].signal==null || roads[c.path[c.pathPos+1]].signal.state){
+        c.x = roads[c.path[c.pathPos]].x + (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)*c.skipsDone / c.skips;
+        c.y = roads[c.path[c.pathPos]].y + (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)*c.skipsDone / c.skips;
+        c.skipsDone++;
+      }
       // console.log(roads[c.path[c.pathPos]].x);
     }
 
   }
 }
-
 
 function reset_c(c){
   c.x = roads[c.src].x;
@@ -66,4 +68,53 @@ function reset_c(c){
   c.skipsDone = 0;
   c.xinc = (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)/c.skips;
   c.yinc = (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)/c.skips;
+}
+
+function updateAmbulance(a){
+  if (a.path[a.pathPos] == a.dest){
+
+    var temp = a.dest;
+    a.dest = a.src;
+    a.src = temp;
+    reset_c(a);
+
+  } else {
+
+        if (a.skipsDone == a.skips) {
+          a.pathPos++;
+          a.x = roads[a.path[a.pathPos]].x;
+          a.y = roads[a.path[a.pathPos]].y;
+          a.skipsDone = 0;
+
+
+        } else {
+            a.x = roads[a.path[a.pathPos]].x + (roads[a.path[a.pathPos+1]].x - roads[a.path[a.pathPos]].x)*a.skipsDone / a.skips;
+            a.y = roads[a.path[a.pathPos]].y + (roads[a.path[a.pathPos+1]].y - roads[a.path[a.pathPos]].y)*a.skipsDone / a.skips;
+            a.skipsDone++;
+            for(var i=0;i<a.emergencyLevel;i++){
+            if(a.pathPos < a.path.length-i && roads[a.path[a.pathPos+i]].signal!=null){
+              sig = roads[a.path[a.pathPos+i]].signal;
+              sig.currentSwitchTime = sig.switchTime;
+              sig.color = 'lightgreen';
+              sig.state = true;
+            }}
+          // console.log(roads[c.path[c.pathPos]].x);
+        }
+
+  }
+}
+
+function set_src_dest(a, src, dest, emergencyLevel){
+  a.src = src;
+  a.dest = dest;
+  a.h = 20;
+  a.w = 20;
+  a.emergencyLevel = emergencyLevel;
+  a.x = roads[a.src].x;
+  a.y = roads[a.src].y;
+  a.path = dijkstra(a.src,a.dest);
+  a.pathPos = 0;
+  a.skipsDone = 0;
+  a.xinc = (roads[a.path[a.pathPos+1]].x - roads[a.path[a.pathPos]].x)/a.skips;
+  a.yinc = (roads[a.path[a.pathPos+1]].y - roads[a.path[a.pathPos]].y)/a.skips;
 }

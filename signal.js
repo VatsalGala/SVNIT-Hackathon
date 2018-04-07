@@ -2,9 +2,10 @@ function Signal(n){
   this.x = roads[n].x;
   this.y = roads[n].y;
   this.state = false;  // 'red' = stop and 'green' = don't stop
-  this.color = (this.state)?'green':'red';
-  this.switchTime = Math.ceil(random(0,5)*30);
+  this.color = (this.state)?'lightgreen':'red';
+  this.switchTime = Math.ceil(random(2,3)*30);
   this.currentSwitchTime = this.switchTime;
+  roads[n].signal = this;
 }
 
 function populateSignals(){
@@ -37,7 +38,6 @@ function updateSignal(s){
   else {
     s.currentSwitchTime = s.switchTime
     s.state = boolean(s.state^true);
-    s.color = (s.state)?'green':'red';
-    console.log(s.state);
+    s.color = (s.state)?'lightgreen':'red';
   }
 }

@@ -18,6 +18,14 @@ var Car = function( color = 'gray', color2 = 'yellow') {
   this.delay = Math.ceil(random(0,30));
 }
 
+function populateCars(){
+  var car_Arr = []
+  for(var i=0;i<10;i++){
+		car_Arr.push(new Car());
+	}
+  return car_Arr;
+}
+
 function moveCar(c){
   if(c.delay > 0){c.delay--;}
   else if(c.path[c.pathPos] == c.dest){
@@ -34,7 +42,7 @@ function moveCar(c){
     if (c.skipsDone == c.skips) {
       c.pathPos++;
       c.x = roads[c.path[c.pathPos]].x;
-      console.log(":"+c.path[c.pathPos]);
+      // console.log(":"+c.path[c.pathPos]);
       c.y = roads[c.path[c.pathPos]].y;
       c.skipsDone = 0;
 
@@ -43,7 +51,7 @@ function moveCar(c){
       c.x = roads[c.path[c.pathPos]].x + (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)*c.skipsDone / c.skips;
       c.y = roads[c.path[c.pathPos]].y + (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)*c.skipsDone / c.skips;
       c.skipsDone++;
-      console.log(roads[c.path[c.pathPos]].x);
+      // console.log(roads[c.path[c.pathPos]].x);
     }
 
   }

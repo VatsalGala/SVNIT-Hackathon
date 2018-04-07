@@ -1,7 +1,7 @@
 var c;
-var c_arr = [];
-function setup()
-{
+var carArr = [];
+var signalArr = [];
+function setup() {
 	height=650;
 	width=650;
 	nodeVal=[2,11,3,9,10,9,
@@ -12,18 +12,19 @@ function setup()
 			 0,0,0,0,4,0];
 	frameRate(30);
 	loadMap();
-	for(var i=0;i<10;i++){
-		c_arr.push(new Car());
-	}
+	carArr = populateCars();
+	signalArr = populateSignals();
 	background(100);
 	createCanvas(height,width);
 }
 
-function draw()
-{
+function draw() {
 	background(100);
 	drawMap();
-	c_arr.map(moveCar);
-	c_arr.map(drawCar);
+	carArr.map(moveCar);
+	carArr.map(drawCar);
+	signalArr.map(updateSignal);
+	signalArr.map(drawSignal);
+
 
 }

@@ -17,7 +17,7 @@ var nodeVal=[2,11,3,9,10,9,
 			 0,0,0,0,4,0];
 
 function loadMap()
-{		
+{
 	for(var i=0;i<36;i++) roads.push(new Node());
 	for (var i=0;i<6;i++)
 	{
@@ -33,22 +33,6 @@ function loadMap()
 	}
 	check_available_nodes();
 }
-
-// function setup()
-// {
-// 	height=650;
-// 	width=650;
-// 	loadMap();
-// 	// printMap();
-// 	background(100);
-// 	createCanvas(height,width);
-// }
-
-// function draw()
-// {
-// 	background(100);
-// 	drawMap();
-// }
 
 function printMap()
 {
@@ -101,7 +85,7 @@ function drawMap()
 			rect(x+25,y,100,50);
 		}
 		else{
-			// line(x+25,y+25,x+25,y-25);	
+			// line(x+25,y+25,x+25,y-25);
 		}
 		if((roads[i].val&1)==0){
 			// line(x-25,y+25,x-25,y-25);
@@ -184,7 +168,7 @@ function Dijkstra(edge,start,end)
 	{
 		path.unshift(prev[i]);
 	}
-	drawPath(path);
+	// drawPath(path);
 	return path;
 }
  function drawPath(path){

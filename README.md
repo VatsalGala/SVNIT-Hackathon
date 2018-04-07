@@ -1,4 +1,4 @@
 # SVNIT-Hackathon
-SVNIT Hackathon 
-# Team SUV
-# Team No. 6
+## Theme-Smart City
+## Team SUV
+## Team No. 6

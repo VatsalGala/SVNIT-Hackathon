@@ -1,87 +1,61 @@
-var CARS = [];
-var BLOCKSIZE = 50;
-
-var Driver = function() {
-  this.turnRight = function(car) {
-    a = {
-      top: car.head.left,
-      left: car.head.bottom,
-      bottom: car.head.right,
-      right: car.head.top
-    };
-    car.head = a;
-    this.start(car);
-  };
-  this.turnLeft = function(car) {
-    a = {
-      top: car.head.right,
-      left: car.head.top,
-      bottom: car.head.left,
-      right: car.head.bottom
-    };
-    car.head = a;
-    this.start(car);
-  };
-  this.start = function(car) {
-    // starts car if green signal or traffic clears
-    // posX, posY, speed changes
-    var z = (car.head.top || car.head.left) ? -1 : 1;
-    if (car.head.top || car.head.bottom) {
-      car.yinc = 50 / 30 * z;
-      car.xinc = 0;
-    } else {
-      car.xinc = 50 / 30 * z;
-      car.yinc = 0;
-    }
-  };
-  this.stop = function(car) {
-    // stops car if red signal or traffic ahead
-    // posX, posY, speed changes
-    car.yinc = 0;
-    car.xinc = 0;
-  };
-  this.changeLane = function(car) {
-    // changes lane if traffic on particular lane
-    // posX, posY changes
-    // move in opp direction
-  };
-
-  this.chooseDir = function(car) {
-    var ran = Math.floor(random(0,4));
-    while(!car.avail[Object.keys(car.avail)[ran]]){
-      var ran = Math.floor(random(0,4));
-    }
-    car.head = {top:false,bottom:false,left:false,right:false}
-    car.head[Object.keys(car.head)[ran]] = true;
-  };
-
-  this.checkAvail = function(car){
-    // Ask the roadmap file to check for available directions.
-    // Update the car.avail attribute.
-  }
-
-}
-
-var Car = function(color = 'gray', posX, posY) {
-  this.color = color;
-  this.x = posX;
-  this.y = posY;
+var Car = function( color = 'gray', color2 = 'yellow') {
+  this.colorPri = color;
+  this.colorSec = color2;
   this.w = 15; // width
-  this.h = 40; // height
-  this.avail = {
-    top: false,
-    bottom: false,
-    left: false,
-    right: false
-  };
-  this.head = {
-    top: false,
-    bottom: false,
-    left: false,
-    right: false
-  };
-  this.xinc = 0;
-  this.yinc = 0;
+  this.h = 15; // height
+  this.src = AVAILABLE_NODES[Math.ceil(random(0,AVAILABLE_NODES.length-1))];
+  do {
+      this.dest = AVAILABLE_NODES[Math.floor(random(0,AVAILABLE_NODES.length))]
+    } while(this.dest == this.src);
+  this.x = roads[this.src].x;
+  this.y = roads[this.src].y;
+  this.path = dijkstra(this.src,this.dest);
+  this.pathPos = 0;
+  this.skips = 30;
+  this.skipsDone = 0;
+  this.xinc = (roads[this.path[this.pathPos+1]].x - roads[this.path[this.pathPos]].x)/this.skips;
+  this.yinc = (roads[this.path[this.pathPos+1]].y - roads[this.path[this.pathPos]].y)/this.skips;
+  this.delay = Math.ceil(random(0,30));
 }
 
-// CARS[0] = new Car('red', 0, 3);
+function moveCar(c){
+  if(c.delay > 0){c.delay--;}
+  else if(c.path[c.pathPos] == c.dest){
+
+    c.src = c.dest;
+    do {
+      c.dest = AVAILABLE_NODES[Math.floor(random(0,AVAILABLE_NODES.length))]
+    } while(c.dest == c.src);
+    reset_c(c);
+
+  }
+  else {
+
+    if (c.skipsDone == c.skips) {
+      c.pathPos++;
+      c.x = roads[c.path[c.pathPos]].x;
+      console.log(":"+c.path[c.pathPos]);
+      c.y = roads[c.path[c.pathPos]].y;
+      c.skipsDone = 0;
+
+    } else {
+
+      c.x = roads[c.path[c.pathPos]].x + (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)*c.skipsDone / c.skips;
+      c.y = roads[c.path[c.pathPos]].y + (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)*c.skipsDone / c.skips;
+      c.skipsDone++;
+      console.log(roads[c.path[c.pathPos]].x);
+    }
+
+  }
+}
+
+
+function reset_c(c){
+  c.x = roads[c.src].x;
+  c.y = roads[c.src].y;
+  c.path = dijkstra(c.src,c.dest);
+  c.pathPos = 0;
+  c.skipsDone = 0;
+  c.xinc = (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)/c.skips;
+  c.yinc = (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)/c.skips;
+}

@@ -4,6 +4,7 @@ function Node() {
 	this.y=10;
 }
 
+var AVAILABLE_NODES = [];
 var height;
 var width;
 var nodeVal=[];
@@ -14,6 +15,7 @@ var nodeVal=[2,11,3,9,10,9,
 			 0,6,11,9,6,13,
 			 0,0,6,7,11,5,
 			 0,0,0,0,4,0];
+
 function loadMap()
 {		
 	for(var i=0;i<36;i++) roads.push(new Node());
@@ -29,6 +31,7 @@ function loadMap()
 			roads[ind].val=nodeVal[ind];
 		}
 	}
+	check_available_nodes();
 }
 
 // function setup()
@@ -110,7 +113,7 @@ function drawMap()
 }
 
 function checkAvail(car){
-	var indx = (car.x-75)/100*6 + (car.y-75)/100;
+	var indx = car.x*6+car.y;console.log(indx);
 	var val = roads[indx].val;
 	var avail = {top	:(val&4)!=0,
 				bottom	:(val&8)!=0,
@@ -158,7 +161,7 @@ function Dijkstra(edge,start,end)
     var found=[];
     var u=start;
     visited[u]=1;
-    var crt=start;
+    var crt=0;
     found.push(u);
     while(crt<found.length)
     {
@@ -172,6 +175,7 @@ function Dijkstra(edge,start,end)
                 found.push(i);
             }
         }
+        // console.log(crt);
 	}
 	path=[];
 	if(prev[end]==end) {console.log("Path not found!!!!!!!!!!!");return;}
@@ -189,4 +193,8 @@ function Dijkstra(edge,start,end)
  		stroke(color(255,0,0));
  		line(roads[path[i]].x,roads[path[i]].y,roads[path[i-1]].x,roads[path[i-1]].y);
  	}
+ }
+
+ function check_available_nodes(){
+ 	for(var i=0;i<nodeVal.length;i++) if(nodeVal[i]!=0) AVAILABLE_NODES.push(i);
  }

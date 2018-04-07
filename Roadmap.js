@@ -8,14 +8,14 @@ var height;
 var width;
 var nodeVal=[];
 var roads=[];
-
+var nodeVal=[2,11,3,9,10,9,
+			 0,14,9,14,5,12,
+			 0,12,6,5,8,12,
+			 0,6,11,9,6,13,
+			 0,0,6,7,11,5,
+			 0,0,0,0,4,0];
 function loadMap()
-{		var nodeVal=[2,11,3,9,10,9,
-				 0,14,9,14,5,12,
-				 0,12,6,5,8,12,
-				 0,6,11,9,6,13,
-				 0,0,6,7,11,5,
-				 0,0,0,0,4,0];
+{		
 	for(var i=0;i<36;i++) roads.push(new Node());
 	for (var i=0;i<6;i++)
 	{
@@ -47,7 +47,6 @@ function loadMap()
 // 	drawMap();
 // }
 
-
 function printMap()
 {
 	for(var i=0;i<36;i++)
@@ -58,7 +57,7 @@ function printMap()
 
 function drawMap()
 {
-	fill("WHITE");
+	fill("WHITE");stroke("white");
 	for(var i=0;i<36;i++)
 	{
 		ellipse(roads[i].x,roads[i].y,10,10);
@@ -119,3 +118,75 @@ function checkAvail(car){
 				right	:(val&2)!=0};
 	car.avail = avail;
 }
+
+function dijkstra(start,end){
+	var edge=[];
+	for(var i=0;i<36;i++)
+	{
+		var e1=[];
+		for(var j=0;j<36;j++)
+		{
+			e1.push(0);
+		}
+		if(nodeVal[i]!=0)
+		{
+			if((nodeVal[i]&8)>0){
+				e1[i+6]=1;
+			}
+			if((nodeVal[i]&4)>0){
+				e1[i-6]=1;
+			}
+			if((nodeVal[i]&2)>0){
+				e1[i+1]=1;
+			}
+			if((nodeVal[i]&1)>0){
+				e1[i-1]=1;
+			}
+		}
+		edge.push(e1);
+	}
+	return (Dijkstra(edge,start,end));
+}
+
+
+function Dijkstra(edge,start,end)
+{
+    var prev=[];
+    for(var i=0;i<36;i++) prev.push(i);
+    var visited=[];
+    for(var i=0;i<36;i++) visited.push(0);
+    var found=[];
+    var u=start;
+    visited[u]=1;
+    var crt=start;
+    found.push(u);
+    while(crt<found.length)
+    {
+	    var idx=found[crt++];
+	    for(var i=0;i<36;i++)
+	    {
+	        if(edge[idx][i]!=0&&visited[i]==0)
+	        {
+                prev[i]=idx;
+                visited[i]=1;
+                found.push(i);
+            }
+        }
+	}
+	path=[];
+	if(prev[end]==end) {console.log("Path not found!!!!!!!!!!!");return;}
+	path.push(end);
+	for(var i=end;i!=prev[i];i=prev[i])
+	{
+		path.unshift(prev[i]);
+	}
+	drawPath(path);
+	return path;
+}
+ function drawPath(path){
+ 	for(var i=1;i<path.length;i++)
+ 	{
+ 		stroke(color(255,0,0));
+ 		line(roads[path[i]].x,roads[path[i]].y,roads[path[i-1]].x,roads[path[i-1]].y);
+ 	}
+ }

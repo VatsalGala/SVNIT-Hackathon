@@ -2,6 +2,7 @@ function Node() {
 	this.val=0;
 	this.x=10;
 	this.y=10;
+	this.signal = null;
 }
 
 var AVAILABLE_NODES = [];

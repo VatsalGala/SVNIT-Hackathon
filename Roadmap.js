@@ -10,8 +10,7 @@ var nodeVal=[];
 var roads=[];
 
 function loadMap()
-{	
-	var nodeVal=[2,11,3,9,10,9,
+{		var nodeVal=[2,11,3,9,10,9,
 				 0,14,9,14,5,12,
 				 0,12,6,5,8,12,
 				 0,6,11,9,6,13,
@@ -59,6 +58,7 @@ function printMap()
 
 function drawMap()
 {
+	fill("WHITE");
 	for(var i=0;i<36;i++)
 	{
 		ellipse(roads[i].x,roads[i].y,10,10);

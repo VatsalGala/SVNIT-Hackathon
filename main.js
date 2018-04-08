@@ -37,7 +37,7 @@ function setup() {
 	amb = new Car('Blue','Black');
 	fir = new Car('lightBlue','Black');
 	set_src_dest(amb, 0, AVAILABLE_NODES[5], 3);
-	set_src_dest(amb, AVAILABLE_NODES[1], AVAILABLE_NODES[7], 3);
+	set_src_dest(fir, AVAILABLE_NODES[AVAILABLE_NODES.length-1], AVAILABLE_NODES[7], 3);
 	emArr.push(amb);
 	emArr.push(fir);
 
@@ -94,12 +94,26 @@ function mouseClicked(){
 		}
 	}
 	console.log(min,min_dist,min_node);
-	var l1 = dijkstra(emArr[0].src, min_dist).length;
-	var l2 = dijkstra(emArr[1].src, min_dist).length;
-	if(l1<l2)
-		updateAmbulance(emArr[0],min_dist);
-	else
-		updateAmbulance(emArr[1],min_dist);
+	
+	var l=[];
+	for(var i=0;i<emArr.length;i++)
+	{
+		l.push(dijkstra(emArr[i].src, min_dist).length);
+	}
+	var min_i=0;
+	for(var i=1;i<l.length;i++)
+	{
+		if(l[i]<l[min_i]) min_i=i;
+	}
+	updateAmbulance(emArr[min_i],min_dist);
+
+	// var l1 = dijkstra(emArr[0].src, min_dist).length;
+	// var l2 = dijkstra(emArr[1].src, min_dist).length;
+	// if(l1<l2)
+	// 	updateAmbulance(emArr[0],min_dist);
+	// else
+	// 	updateAmbulance(emArr[1],min_dist);
+
 
 }
 

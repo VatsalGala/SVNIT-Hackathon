@@ -22,7 +22,7 @@ var Car = function( color = 'gray', color2 = 'gray') {
 
 function populateCars(){
   var car_Arr = []
-  for(var i=0;i<10;i++){
+  for(var i=0;i<20;i++){
 		car_Arr.push(new Car());
 	}
   return car_Arr;
@@ -73,7 +73,7 @@ function reset_c(c){
 // var a.isSwap=false;
 // var a.destNode;
 function updateAmbulance(a, min_node=0){
-  console.log(min_node);
+  // console.log(min_node);
   if(min_node!=0){
     a.isSwap=true;
     a.destNode=min_node;

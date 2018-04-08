@@ -12,12 +12,12 @@ var Car = function( color = 'gray', color2 = 'gray') {
   this.path = dijkstra(this.src, this.dest);
   this.pathPos = 0;
   this.skips = Math.ceil(random(30,50));
-  this.skipsDone = 0;
-  console.log(this.src, this.dest, this.pathPos, this.path);
-  this.xinc = (roads[this.path[this.pathPos+1]].x - roads[this.path[this.pathPos]].x)/this.skips;
-  this.yinc = (roads[this.path[this.pathPos+1]].y - roads[this.path[this.pathPos]].y)/this.skips;
+  this.skipsDone = 0;   
+  // console.log(this.src, this.dest, this.pathPos, this.path);
   this.delay = Math.ceil(random(0,30));
   this.emergencyLevel = 0;
+  this.isSwap = false;
+  this.destNode;
 }
 
 function populateCars(){
@@ -67,21 +67,41 @@ function reset_c(c){
   c.path = dijkstra(c.src,c.dest);
   c.pathPos = 0;
   c.skipsDone = 0;
-  c.xinc = (roads[c.path[c.pathPos+1]].x - roads[c.path[c.pathPos]].x)/c.skips;
-  c.yinc = (roads[c.path[c.pathPos+1]].y - roads[c.path[c.pathPos]].y)/c.skips;
 }
 
-function updateAmbulance(a){
-  if (a.path[a.pathPos] == a.dest){
 
-    var temp = a.dest;
+// var a.isSwap=false;
+// var a.destNode;
+function updateAmbulance(a, min_node=0){
+  console.log(min_node);
+  if(min_node!=0){
+    a.isSwap=true;
+    a.destNode=min_node;
+  }
+  if (a.path[a.pathPos] == a.dest){
+    if(a.isSwap){
+      a.dest=a.destNode;
+      a.src=a.path[a.pathPos];
+      reset_c(a);
+      a.isSwap=false;
+      min_node=0;
+      return;
+    }
+    temp = a.dest;
     a.dest = a.src;
     a.src = temp;
     reset_c(a);
 
   } else {
-
         if (a.skipsDone == a.skips) {
+          if(a.isSwap){
+            // console.log(a.src, a.dest);
+            a.dest=a.destNode;
+            a.src=a.path[a.pathPos+1];
+            reset_c(a);
+            a.isSwap = false;
+            return;
+          }
           a.pathPos++;
           a.x = roads[a.path[a.pathPos]].x;
           a.y = roads[a.path[a.pathPos]].y;
@@ -116,6 +136,4 @@ function set_src_dest(a, src, dest, emergencyLevel){
   a.path = dijkstra(a.src,a.dest);
   a.pathPos = 0;
   a.skipsDone = 0;
-  a.xinc = (roads[a.path[a.pathPos+1]].x - roads[a.path[a.pathPos]].x)/a.skips;
-  a.yinc = (roads[a.path[a.pathPos+1]].y - roads[a.path[a.pathPos]].y)/a.skips;
 }

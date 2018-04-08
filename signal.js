@@ -1,7 +1,7 @@
 function Signal(n){
   this.x = roads[n].x;
   this.y = roads[n].y;
-  this.state = false;  // 'red' = stop and 'green' = don't stop
+  this.state = Boolean(Math.round(Math.random()));  // 'red' = stop and 'green' = don't stop
   this.color = (this.state)?'lightgreen':'red';
   this.switchTime = Math.ceil(random(2,3)*30);
   this.currentSwitchTime = this.switchTime;

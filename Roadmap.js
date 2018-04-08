@@ -47,10 +47,10 @@ function printMap()
 function drawMap()
 {
 	fill("WHITE");stroke("white");
-	for(var i=0;i<GRID_HEIGHT*GRID_WIDTH;i++)
-	{
-		ellipse(roads[i].x,roads[i].y,10,10);
-	}
+	// for(var i=0;i<GRID_HEIGHT*GRID_WIDTH;i++)
+	// {
+	// 	// ellipse(roads[i].x,roads[i].y,10,10);
+	// }
 	for(var i=0;i<GRID_WIDTH*GRID_HEIGHT;i++)
 	{
 		rectMode(CENTER);
@@ -134,7 +134,7 @@ function dijkstra(start,end){
 		}
 		edge.push(e1);
 	}
-	console.log(edge);
+	// console.log(edge);
 	return (Dijkstra(edge,start,end));
 }
 
@@ -173,12 +173,18 @@ function Dijkstra(edge,start,end)
 	}
 	return path;
 }
- function drawPath(path){
- 	for(var i=1;i<path.length;i++)
+ function drawPath(a){
+ 	path=a.path;
+ 	stroke(color(255,0,0));
+ 	strokeWeight(4);
+ 	if(a.pathPos+1<a.path.length)
+ 	line(a.x, a.y, roads[a.path[a.pathPos+1]].x ,roads[a.path[a.pathPos+1]].y);
+ 	for(var i=a.pathPos+2;i<path.length;i++)
  	{
  		stroke(color(255,0,0));
  		line(roads[path[i]].x,roads[path[i]].y,roads[path[i-1]].x,roads[path[i-1]].y);
  	}
+ 	strokeWeight(1);
  }
 
  function check_available_nodes(){

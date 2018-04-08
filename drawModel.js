@@ -1,6 +1,6 @@
 
-var signalWidth = 30;
-var signalHeight = 30;
+var signalWidth = 20;
+var signalHeight = 20;
 
 function drawCar(c){
   rectMode(CENTER);
@@ -12,5 +12,6 @@ function drawCar(c){
 function drawSignal(s){
   fill(s.color);
   stroke("BLACK");
+  strokeWeight(2);
   ellipse(s.x, s.y ,signalWidth, signalHeight);
 }

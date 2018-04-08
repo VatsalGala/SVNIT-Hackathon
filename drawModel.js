@@ -1,7 +1,3 @@
-
-var signalWidth = 20;
-var signalHeight = 20;
-
 function drawCar(c){
   rectMode(CENTER);
   stroke(c.colorSec);

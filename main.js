@@ -4,18 +4,18 @@ var signalArr = [];
 var emArr = [];
 var amb;
 var emergencyLevel;
-
+var signalWidth = 20;
+var signalHeight = 20;
+var vehSize = 30;
 function setup() {
 	emergencyLevel = 2;
-	height=1000;
-	width=1000;
 	nodeVal=[
 				2,	11,	3,	9,	10,	11,	3,	3,	3,	9,
 				0,	14,	9,	14,	5,	14,	3,	9,	0,	12,
 				0,	12,	6,	5,	8,	14,	3,	5,	0,	12,
 				10,	7,	11,	9,	6,	15,	3,	11,	3,	5,
 				12,	0,	6,	7,	11,	5,	0,	12,	0,	0,
-				14,	11,	3,	3,	13,	10,	3,	15,	3,	9, 
+				14,	11,	3,	3,	13,	10,	3,	15,	3,	9,
 				12,	12,	0,	0,	12,	12,	10,	15,	3,	13,
 				14,	7,	3,	11,	15,	15,	15,	15,	3,	13,
 				12,	0,	0,	12,	12,	12,	12,	12,	0,	12,
@@ -24,7 +24,7 @@ function setup() {
 	GRID_WIDTH = 10;
 	GRID_HEIGHT = 10;
 	GR_DM = GRID_HEIGHT*GRID_WIDTH;
-	BLOCK_WIDTH = 50;
+	BLOCK_WIDTH = 100;
 	BL_HF = BLOCK_WIDTH/2;
 	BL_QT = BLOCK_WIDTH/4;
 	BL_TF = BLOCK_WIDTH*3/4;
@@ -33,7 +33,8 @@ function setup() {
 	carArr = populateCars();
 	signalArr = populateSignals();
 	background(100);
-	createCanvas(height,width);
+	createCanvas(BLOCK_WIDTH*GRID_WIDTH+BL_HF,
+							BLOCK_WIDTH*GRID_HEIGHT+BL_HF);
 	amb = new Car('Blue','Black');
 	fir = new Car('lightBlue','Black');
 	set_src_dest(amb, 0, AVAILABLE_NODES[5], 3);
@@ -73,7 +74,7 @@ function drawRiver(){
 	x=roads[45].x;
 	y=roads[45].y;
 	rect(x-BL_QT,y-BLOCK_WIDTH,BLOCK_WIDTH*4+BL_HF,2*BLOCK_WIDTH);
-	
+
 }
 
 function mouseClicked(){
@@ -94,7 +95,7 @@ function mouseClicked(){
 		}
 	}
 	console.log(min,min_dist,min_node);
-	
+
 	var l=[];
 	for(var i=0;i<emArr.length;i++)
 	{

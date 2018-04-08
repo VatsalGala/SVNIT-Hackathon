@@ -12,7 +12,7 @@ var Car = function( color = 'gray', color2 = 'gray') {
   this.path = dijkstra(this.src, this.dest);
   this.pathPos = 0;
   this.skips = Math.ceil(random(30,50));
-  this.skipsDone = 0;   
+  this.skipsDone = 0;
   // console.log(this.src, this.dest, this.pathPos, this.path);
   this.delay = Math.ceil(random(0,30));
   this.emergencyLevel = 0;
@@ -128,8 +128,8 @@ function updateAmbulance(a, min_node=0){
 function set_src_dest(a, src, dest, emergencyLevel){
   a.src = src;
   a.dest = dest;
-  a.h = 20;
-  a.w = 20;
+  a.h = vehSize;
+  a.w = vehSize;
   a.emergencyLevel = emergencyLevel;
   a.x = roads[a.src].x;
   a.y = roads[a.src].y;

@@ -1,5 +1,5 @@
 # SVNIT-Hackathon
-## Theme-Smart City
+## Theme - Smart City (Traffic Management System)
 
 The basic idea of this simulation is to provide an efficient traffic management control to a smart city especially for Emergency Service vehicles i.e Ambulance, Fire Brigade, Police.  
   
@@ -14,4 +14,4 @@ Logic behind this application is that-
 
 
 
-## Team SUV
+### -Team SUV

@@ -5,14 +5,15 @@ var Car = function( color = 'gray', color2 = 'gray') {
   this.h = 15; // height
   this.src = AVAILABLE_NODES[Math.ceil(random(0,AVAILABLE_NODES.length-1))];
   do {
-      this.dest = AVAILABLE_NODES[Math.floor(random(0,AVAILABLE_NODES.length))]
+      this.dest = AVAILABLE_NODES[Math.floor(random(0,AVAILABLE_NODES.length-1))]
     } while(this.dest == this.src);
   this.x = roads[this.src].x;
   this.y = roads[this.src].y;
-  this.path = dijkstra(this.src,this.dest);
+  this.path = dijkstra(this.src, this.dest);
   this.pathPos = 0;
   this.skips = Math.ceil(random(30,50));
   this.skipsDone = 0;
+  console.log(this.src, this.dest, this.pathPos, this.path);
   this.xinc = (roads[this.path[this.pathPos+1]].x - roads[this.path[this.pathPos]].x)/this.skips;
   this.yinc = (roads[this.path[this.pathPos+1]].y - roads[this.path[this.pathPos]].y)/this.skips;
   this.delay = Math.ceil(random(0,30));
